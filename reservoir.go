@@ -62,6 +62,9 @@ func main() {
 			reservoir[j] = line
 		}
 	}
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
 
 	for idx := range reservoir {
 		fmt.Println(reservoir[idx])
