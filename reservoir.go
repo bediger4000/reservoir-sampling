@@ -24,11 +24,15 @@ import (
 
 func main() {
 
+	if len(os.Args) < 2 {
+		usage(os.Args[0])
+	}
+
 	rand.Seed(time.Now().UnixNano() | int64(os.Getpid()))
 
 	k, err := strconv.Atoi(os.Args[1])
 	if err != nil {
-		log.Fatal(err)
+		usage(os.Args[0], err)
 	}
 
 	var reservoir []string
@@ -69,4 +73,14 @@ func main() {
 	for idx := range reservoir {
 		fmt.Println(reservoir[idx])
 	}
+}
+
+func usage(fileName string, errors ...error) {
+	fmt.Fprintf(os.Stderr, "%s: reservoir sampling of lines of test on stdin\n", fileName)
+	fmt.Fprintf(os.Stderr, "usage: %s <NUMBER>\n", fileName)
+	fmt.Fprintf(os.Stderr, "puts at most NUMBER randomly-chosen and ordered lines of stdin on stdout\n")
+	for _, err := range errors {
+		fmt.Fprintf(os.Stderr, "%v\n", err)
+	}
+	os.Exit(1)
 }
